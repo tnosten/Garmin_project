@@ -1,1 +1,3 @@
 garminconnect
+pandas
+matplotlib
