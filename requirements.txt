@@ -1,3 +1,6 @@
 garminconnect
 pandas
 matplotlib
+numpy
+pandera
+python-dotenv
