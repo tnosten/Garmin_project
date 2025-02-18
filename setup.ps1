@@ -1,5 +1,5 @@
 # Create virtual environment
-python -m venv .venv
+# python -m venv .venv
 
 # Activate virtual environment
 .venv\Scripts\Activate
@@ -9,3 +9,4 @@ pip install --upgrade pip
 pip install -r requirements.txt
 
 Write-Host "Setup complete. To activate the environment, run: .\.venv\Scripts\Activate"
+
