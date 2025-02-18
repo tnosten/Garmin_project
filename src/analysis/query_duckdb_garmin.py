@@ -2,6 +2,7 @@ import dlt
 import os
 from garminconnect import Garmin
 from dotenv import load_dotenv
+import duckdb
 
 # Load environment variables
 load_dotenv()
