@@ -21,7 +21,7 @@ def authenticate_garmin():
         return None
 
 # Function to fetch Garmin activities
-def fetch_garmin_activities(garmin, limit=10):
+def fetch_garmin_activities(garmin, limit=1000):
     try:
         return garmin.get_activities(0, limit)  # Fetches latest 'limit' activities
     except Exception as e:
@@ -32,9 +32,8 @@ def fetch_garmin_activities(garmin, limit=10):
 def load_garmin_activities():
     pipeline = dlt.pipeline(
         pipeline_name="garmin_pipeline",
-        destination="duckdb",
+        destination=dlt.destinations.duckdb("./data/garmin_pipeline.duckdb"),
         dataset_name="garmin_data"
-        # export_path="./data/garmin.duckdb"  # Adjusted path
     )
 
     garmin = authenticate_garmin()
@@ -45,7 +44,12 @@ def load_garmin_activities():
     activities = fetch_garmin_activities(garmin)
 
     # Load data into DuckDB
-    load_info = pipeline.run(activities, table_name="activities")
+    load_info = pipeline.run(
+        activities, 
+        table_name="activities",
+        write_disposition="merge",  # Avoid duplicates
+        primary_key="activityId",   # Garmin's unique identifier for activities
+        )
     print(load_info)
 
 if __name__ == "__main__":
@@ -53,9 +57,24 @@ if __name__ == "__main__":
 
 
 
-# ################# read from DuckDB
-# conn = duckdb.connect("garmin_pipeline.duckdb")
 
-# # Run a simple query
-# df = conn.execute("SELECT * FROM garmin_data.activities").fetchdf()
-# print(df)
+
+# import dlt
+
+# pipeline = dlt.pipeline(
+#     pipeline_name="garmin_pipeline",
+#     destination="duckdb"
+# )
+
+# print(pipeline.destination.config)
+
+
+
+# import dlt
+
+# pipeline = dlt.pipeline(
+#     pipeline_name="garmin_pipeline",
+#     destination="duckdb"
+# )
+
+# print(vars(pipeline.config))  # Check all loaded configs
