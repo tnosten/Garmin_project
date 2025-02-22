@@ -1,8 +1,17 @@
 import dlt
 import requests
 from typing import Any, Optional
+from dlt.sources.rest_api import (
+    RESTAPIConfig,
+    check_connection,
+    rest_api_resources,
+    rest_api_source,
+)
 
 STRAVA_API_URL = "https://www.strava.com/api/v3"
+
+dlt.secrets._secrets_storage = None  # This resets the in-memory cache
+
 
 @dlt.source(name="strava")
 def strava_source(
@@ -15,7 +24,7 @@ def strava_source(
     if not access_token or is_token_expired():
         access_token = refresh_access_token(refresh_token, client_id, client_secret)
     
-    config: dlt.sources.RESTAPIConfig = {
+    config: RESTAPIConfig = {
         "client": {
             "base_url": STRAVA_API_URL,
             "auth": {
@@ -49,7 +58,7 @@ def strava_source(
         ],
     }
 
-    yield from dlt.sources.rest_api_resources(config)
+    yield from rest_api_resources(config)
 
 
 def is_token_expired() -> bool:
@@ -83,7 +92,7 @@ def refresh_access_token(refresh_token: str, client_id: str, client_secret: str)
 def load_strava() -> None:
     pipeline = dlt.pipeline(
         pipeline_name="strava_pipeline",
-        destination="duckdb",
+        destination=dlt.destinations.duckdb("./data/strava_pipeline.duckdb"),
         dataset_name="strava_data",
     )
 
@@ -93,3 +102,46 @@ def load_strava() -> None:
 
 if __name__ == "__main__":
     load_strava()
+
+
+
+
+
+
+
+############################
+
+print("Loaded access token:", dlt.secrets.get("access_token"))
+
+
+import requests
+
+
+response = requests.get(
+    "https://www.strava.com/api/v3/athlete",
+    headers={"Authorization": f"Bearer {access_token}"}
+)
+
+print(response.json())  # Check if access is limited
+
+
+
+import dlt
+
+
+# Print the token that Python is using
+access_token = dlt.secrets.value["strava"]["access_token"]
+print(f"Python is using this token: {access_token}")
+
+
+
+
+
+
+import dlt
+
+# Force reload secrets
+dlt.secrets.reload()
+
+# Print the token dlt is using
+print(f"dlt.secrets.value token: {dlt.secrets.value.get('strava', {}).get('access_token')}")
