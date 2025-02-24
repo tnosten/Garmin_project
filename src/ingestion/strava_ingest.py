@@ -1,4 +1,5 @@
 import dlt
+import os
 import requests
 from typing import Any, Optional
 from dlt.sources.rest_api import (
@@ -8,17 +9,29 @@ from dlt.sources.rest_api import (
     rest_api_source,
 )
 
+from dotenv import load_dotenv
+
+load_dotenv()
+
 STRAVA_API_URL = "https://www.strava.com/api/v3"
+access_token = os.getenv("access_token")
+refresh_token= os.getenv("refresh_token")
+client_id= os.getenv("client_id") 
+client_secret= os.getenv("client_secret")
 
 dlt.secrets._secrets_storage = None  # This resets the in-memory cache
 
 
 @dlt.source(name="strava")
 def strava_source(
-    access_token: Optional[str] = dlt.secrets["access_token"], 
-    refresh_token: Optional[str] = dlt.secrets["refresh_token"], 
-    client_id: Optional[str] = dlt.secrets["customer_id"], 
-    client_secret: Optional[str] = dlt.secrets["customer_secret"]
+    access_token: Optional[str] = os.getenv("access_token"),  
+    refresh_token: Optional[str] = os.getenv("refresh_token"), 
+    client_id: Optional[str] = os.getenv("client_id") , 
+    client_secret: Optional[str]= os.getenv("client_secret")    
+    # # access_token= os.getenv("access_token"), 
+    # refresh_token: Optional[str] = dlt.secrets["sources.rest_api_pipeline.strava_source.refresh_token"], 
+    # client_id: Optional[str] = dlt.secrets["sources.rest_api_pipeline.strava_source.customer_id"], 
+    # client_secret: Optional[str] = dlt.secrets["sources.rest_api_pipeline.strava_source.customer_secret"]
 ) -> Any:
     # Refresh the access token if needed
     if not access_token or is_token_expired():
@@ -111,18 +124,6 @@ if __name__ == "__main__":
 
 ############################
 
-print("Loaded access token:", dlt.secrets.get("access_token"))
-
-
-import requests
-
-
-response = requests.get(
-    "https://www.strava.com/api/v3/athlete",
-    headers={"Authorization": f"Bearer {access_token}"}
-)
-
-print(response.json())  # Check if access is limited
 
 
 
@@ -130,7 +131,7 @@ import dlt
 
 
 # Print the token that Python is using
-access_token = dlt.secrets.value["strava"]["access_token"]
+access_token = dlt.secrets.value["rest_api_pipeline"]["strava_source"]
 print(f"Python is using this token: {access_token}")
 
 
