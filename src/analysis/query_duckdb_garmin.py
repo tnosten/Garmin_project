@@ -49,6 +49,7 @@ fastest_1mile = conn.execute("""
     limit 1
 """).fetchdf()
 
+print(fastest_1mile)
 
 
 
@@ -69,17 +70,59 @@ print(fastest_5k)
 
 
 
-# Get the row with the highest "Split" values in seconds
-fastest_1k = df.loc[df["fastest_split_1000"].idxmax()]
-fastest_1mile = df.loc[df["fastest_split_1609"].idxmax()]
-fastest_5k = df.loc[df["fastest_split_5000"].idxmax()]
-print(fastest_1k)
 
-df.head(max())
-print(df)
+test = conn.execute("""
+    SELECT
+        '5K' AS best_effort, 
+        MIN(CAST(fastest_split_5000 AS float)/60) AS time
+    FROM garmin_data.activities
+    order by time asc
+    LIMIT 1
+""").fetchdf()
+
+print(test)
 
 
 
+
+
+
+best_efforts = conn.execute("""
+    WITH 
+    five_k_best AS (
+        SELECT 
+            '5K' AS best_effort, 
+            MIN(CAST(fastest_split_5000 AS float) / 60) AS time
+        FROM garmin_data.activities
+        LIMIT 1
+    ),
+    one_k_best AS (
+        SELECT 
+            '1K' AS best_effort, 
+            MIN(CAST(fastest_split_1000 AS float) / 60) AS time
+        FROM garmin_data.activities
+        LIMIT 1
+    ),
+    one_mile_best AS (
+        SELECT 
+            '1 mile' AS best_effort, 
+            MIN(CAST(fastest_split_1609 AS float) / 60) AS time
+        FROM garmin_data.activities
+        LIMIT 1
+    ),
+    Final as (
+        Select * from five_k_best
+        UNION
+        Select * from one_k_best
+        UNION
+        Select * from one_mile_best
+        )
+    SELECT * FROM Final
+                            
+""").fetchdf()
+
+
+print(best_efforts)
 
 st.dataframe(all_activities) #save to to a streamlit dataframe
 
