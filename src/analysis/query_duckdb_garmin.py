@@ -124,7 +124,8 @@ best_efforts = conn.execute("""
 
 print(best_efforts)
 
-st.dataframe(all_activities) #save to to a streamlit dataframe
+st.title("My DataFrame Viewer")
+st.dataframe(best_efforts)  # Displays in Streamlit
 
 
 
