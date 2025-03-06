@@ -12,8 +12,10 @@ load_dotenv()
 ################# connect to  DuckDB
 conn = duckdb.connect("./data/garmin_pipeline.duckdb")
 
-# get all activities
-df = conn.execute("SELECT * FROM garmin_data.activities").fetchdf() 
+with duckdb.connect("./data/garmin_pipeline.duckdb") as conn:
+    df = conn.execute("SELECT * FROM garmin_data.activities").fetchdf() # get all activities
+
+
 
 #explore data
 df.info()
@@ -67,23 +69,6 @@ fastest_5k = conn.execute("""
 """).fetchdf()
 
 print(fastest_5k)
-
-
-
-
-test = conn.execute("""
-    SELECT
-        '5K' AS best_effort, 
-        MIN(CAST(fastest_split_5000 AS float)/60) AS time
-    FROM garmin_data.activities
-    order by time asc
-    LIMIT 1
-""").fetchdf()
-
-print(test)
-
-
-
 
 
 
