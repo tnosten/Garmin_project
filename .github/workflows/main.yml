@@ -51,4 +51,5 @@ jobs:
           pip install pytest duckdb
 
       - name: Run Tests
-        run: pytest tests/
+        run: |
+          PYTHONPATH=$PYTHONPATH:$(pwd) pytest tests/
