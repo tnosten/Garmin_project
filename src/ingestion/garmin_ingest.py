@@ -2,7 +2,6 @@ import dlt
 import os
 from garminconnect import Garmin
 from dotenv import load_dotenv
-from dlt.sources.rest_api import RESTAPIConfig
 
 # Load environment variables
 load_dotenv()

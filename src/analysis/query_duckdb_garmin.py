@@ -1,8 +1,6 @@
 
-from garminconnect import Garmin
 from dotenv import load_dotenv
 import duckdb
-import pandas as pd
 import streamlit as st
 
 # Load environment variables

@@ -4,11 +4,8 @@ import requests
 from typing import Any, Optional
 from dlt.sources.rest_api import (
     RESTAPIConfig,
-    check_connection,
     rest_api_resources,
-    rest_api_source,
 )
-
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -124,22 +121,9 @@ if __name__ == "__main__":
 
 ############################
 
-
-
-
-import dlt
-
-
 # Print the token that Python is using
 access_token = dlt.secrets.value["rest_api_pipeline"]["strava_source"]
 print(f"Python is using this token: {access_token}")
-
-
-
-
-
-
-import dlt
 
 # Force reload secrets
 dlt.secrets.reload()

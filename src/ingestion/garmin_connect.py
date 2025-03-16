@@ -4,13 +4,13 @@ import datetime
 import pandas as pd
 import matplotlib.pyplot as plt
 from dotenv import load_dotenv
+import os
 
 load_dotenv()
 
 # # Update with your own credentials
 
 
-import os
 username = os.getenv("GARMIN_USERNAME")
 password = os.getenv("GARMIN_PASSWORD")
 

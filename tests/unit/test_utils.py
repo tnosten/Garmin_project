@@ -1,5 +1,3 @@
-import pytest
-import duckdb
 from src.analysis.query_duckdb_garmin import best_efforts  # Example import
 
 def test_best_efforts():
