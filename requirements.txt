@@ -7,3 +7,5 @@ python-dotenv
 dlt[duckdb]
 duckdb
 streamlit
+pytest
+ruff

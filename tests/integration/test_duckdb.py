@@ -1,5 +1,5 @@
 import duckdb
-
+import pytest
 
 @pytest.fixture
 def setup_duckdb():
