@@ -1,0 +1,24 @@
+name: Garmin Ingestion
+
+on:
+  schedule:
+    - cron: "0 3 * * *"  # Runs every day at 3 AM UTC
+  workflow_dispatch:  # Allows manual trigger
+
+jobs:
+  ingest:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set Up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.12
+
+      - name: Install Dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run Garmin Ingestion
+        run: python src/ingest/garmin_ingest.py
