@@ -21,4 +21,4 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Run Garmin Ingestion
-        run: python src/ingest/garmin_ingest.py
+        run: python src/ingestion/garmin_ingest.py
