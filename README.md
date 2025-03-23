@@ -1,4 +1,4 @@
-# **Garmin Data Engineering Project**
+# **Customized Garmin Dashboard**
 
 This project extracts, transforms, and visualizes running activity data from the **Garmin API** and stores it in **DuckDB** for analysis. It includes a **Streamlit dashboard** for visualization and **GitHub Actions CI/CD** for automation.
 
