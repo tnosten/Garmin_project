@@ -6,6 +6,9 @@ This project extracts, transforms, and visualizes running activity data from the
 
 ## **Project Overview**
 
+![Project Architecture](docs/architecture.png)
+
+
 ### **Features**  
 - Extracts activity data using the **Garmin API** (with potential support for **Strava API**)  
 - Stores structured data in **DuckDB** for efficient querying  
