@@ -1,33 +1,81 @@
-# Garmin_project
-objective: Extract data from garmin device and create dashboard with some analytics
+Garmin Data Engineering Project
+This project extracts, transforms, and visualizes running activity data from the Garmin API and stores it in DuckDB for analysis. It includes a Streamlit dashboard for visualization and GitHub Actions CI/CD for automation.
 
-Data sources:
-garmin connect (API)
-Strava (API)
-Stryd (unknown)
-garmin lifestyle data?
-...
+Project Overview
+Features
+Extracts activity data using the Garmin API (with potential support for Strava API)
+Stores structured data in DuckDB for efficient querying
+Implements best-effort tracking (1K, 5K, and 1 Mile times)
+Provides a Streamlit dashboard for interactive data visualization
+Automates CI/CD with GitHub Actions for linting, testing, and ingestion
+Project Structure
+bash
+Copier
+Modifier
+Garmin_project-main/
+│── .github/workflows/   # CI/CD automation
+│── src/
+│   ├── ingestion/       # Data extraction scripts
+│   ├── analysis/        # Querying and transformations
+│   ├── utils/           # Helper functions (if needed)
+│── tests/               # Unit & integration tests
+│── data/                # Ignored (stores local DB files)
+│── app.py               # Streamlit dashboard
+│── requirements.txt     # Dependencies
+│── README.md            # Documentation
+Data Ingestion
+To fetch data from the Garmin API and store it in DuckDB, run:
 
-Data ingestion using DLT
+bash
+Copier
+Modifier
+python src/ingestion/garmin_ingest.py
+This script retrieves the latest Garmin activities and updates the local database file.
 
-Clean data (data quality enforcement)
+Running the Streamlit Dashboard
+To launch the Streamlit app, use:
 
-Load data into duckdb
+bash
+Copier
+Modifier
+streamlit run app.py
+This will open an interactive dashboard displaying best-effort running times and a map of running activities.
 
-Model the data and clean using duckdb transformations
+CI/CD with GitHub Actions
+This project includes automated workflows:
 
-Load into Streamlit for dashboard
+ci.yml – Runs linting and tests
+ingest.yml – Fetches data from the Garmin API
+Running Tests Locally
+To ensure data integrity and correct API behavior, run:
 
+bash
+Copier
+Modifier
+pytest tests/
+Installation & Setup
+Clone the repository:
 
+bash
+Copier
+Modifier
+git clone https://github.com/yourusername/Garmin_project.git
+cd Garmin_project
+Set up a virtual environment and install dependencies:
 
+bash
+Copier
+Modifier
+python -m venv .venv
+source .venv/bin/activate  # macOS/Linux
+# OR
+.venv\Scripts\activate  # Windows
 
+pip install -r requirements.txt
+Configure credentials:
 
-About the structure of the repo:
-
-- setup.ps1 contains the powershell scripts that are used to set the project up
-- requirements.txt contains all the dependencies
-- gitignore is to ignore the .venv folder and .env from being commited into github
-- .env is to store environment variables (username &password)
-- src folder contains the main source code (to be developed further)
-- data contains the actual data (should be built out into medalion structure?)
-- .venv is the virtual environment to make the dependencies (library ,python version) consistent
+Create a .env file with your Garmin API credentials
+Future Improvements
+Add Strava API ingestion
+Improve best-effort calculations
+Enhance CI/CD with scheduled ingestion runs
