@@ -11,8 +11,6 @@ load_dotenv()
 with duckdb.connect("./data/garmin_pipeline.duckdb") as conn:
     df = conn.execute("SELECT * FROM garmin_data.activities").fetchdf() # get all activities
 
-
-
     #explore data
     df.info()
     df.to_csv("output.csv", index=False)  # Save without index
@@ -53,18 +51,22 @@ with duckdb.connect("./data/garmin_pipeline.duckdb") as conn:
     """).fetchdf()
 
 
-    print(best_efforts)
+    # print(best_efforts)
 
     st.title("My Garmin Activities")
     st.dataframe(best_efforts)  # Displays in Streamlit
 
-    ## Create a sample DataFrame with latitude and longitude values
-
+    ## Create a dataframe with the latest 5 runs
     run_df = df[df["activity_type__type_key"] == "running"]
-    run_df = run_df[['start_latitude', 'start_longitude']]
+    latest_runs = run_df.sort_values('start_time_local', ascending=False).head(5)
+    st.dataframe(latest_runs)
 
+
+    ## Create a sample DataFrame with latitude and longitude values
+    run_df = run_df[['start_latitude', 'start_longitude']]
     ## Create a map with the data    
     run_df.columns = ['latitude', 'longitude']
     ## Create a map with the data
     st.map(run_df)
+
 
