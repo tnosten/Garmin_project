@@ -66,6 +66,7 @@ with duckdb.connect("./data/garmin_pipeline.duckdb") as conn:
     run_df = run_df[['start_latitude', 'start_longitude']]
     ## Create a map with the data    
     run_df.columns = ['latitude', 'longitude']
+    run_df.dropna(subset=['latitude', 'longitude'], inplace=True)
     ## Create a map with the data
     st.map(run_df)
 
