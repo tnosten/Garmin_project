@@ -1,4 +1,4 @@
-from src.analysis.query_duckdb_garmin import best_efforts  # Example import
+from src.analysis.query_duckdb_garmin import best_efforts
 
 def test_best_efforts():
     assert not best_efforts.empty, "Best efforts dataframe should not be empty"
